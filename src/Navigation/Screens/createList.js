@@ -1,47 +1,17 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, StyleSheet, Image, AsyncStorage } from "react-native"
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import List from './List'
+import { connect } from 'react-redux'
+import {additem} from  '../../Redux/Actions/ShoppingListActions'
 
-export default function Home(){
-    const [product, setProduct] = useState();
 
-    const save =async() => {
-        try {
-            await AsyncStorage.setItem("MyProduct", product)
-        } catch (err) {
-            alert(err)
-            
-        }
-    }
+ function Home(){
+    const [product, setProduct] = useState(null);
 
-    const load = async() => {
-        try {
-            let product = await AsyncStorage.getItem("MyProduct");
-            if(product !== null){
-                setProduct(product);
-            }
-            
-        } catch (err) {
-            alert(err)
-            
-        }
-    }
-
-    const remove = async() => {
-        try {
-            await AsyncStorage.removeItem("MyProduct")
-            
-        } catch (err) {
-            alert(err)
-        }finally{
-            setProduct("")
-        }
-    }
-   useEffect(() => {
-       load();
+    
        
-       
-   }, [])
+  
     return(
         <View style={styles.container}>
             <Image source ={
@@ -50,29 +20,30 @@ export default function Home(){
                 resizeMode="contain"
                 />
 
+
             <Text style = {{height:30}}>{product}</Text>
                 <Text style = {styles.name}> What do you want to shop</Text>
-                <TextInput style={styles.input} onChangeText={(text) =>setProduct(text)}/>
-                <TouchableOpacity style={styles.button} onPress ={() => save()}>
+                <TextInput
+                 value ={product}
+                 style={styles.input}
+                 onChangeText={(product) =>setProduct(product)}/>
+
+                <TouchableOpacity style={styles.button}
+                 onPress ={() => props.add(product)}>
+                   
                     <Text style= {{color:"white"}}>Okay</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={ () => remove()}>
-                    <Text style= {{color:"white"}}>Remove</Text>
+
+                <TouchableOpacity 
+                style={styles.button}
+                 onPress={ () => props.navigation.navigate('List')}>
+                    <Text style= {{color:"white"}}>See your ShoppingList</Text>
                 </TouchableOpacity>
 
         </View>
 
     );
 }
-
-
-
-
-
-
-
-
-
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -109,4 +80,18 @@ const styles = StyleSheet.create({
 
      }
   });
+
+  const mapStateToProps = (state) =>{
+      return{
+          products: state.shoppingListReducer.List
+      }
+  }
+
+  const mapDispatchToProps = (dispatch) => {
+      return{
+          add: (product) => dispatch(additem(product))
+      }
+  }
+
+  export default connect(mapDispatchToProps, mapStateToProps)(Home)
   
