@@ -5,8 +5,7 @@ const initialstate ={
     shoppinglist : []
 
 }
-
-export const shoppingListReducer = (state = initialstate, action) => {
+ const reducer = (state = initialstate, action) => {
     switch(action.type){
         case ADD_ITEM:
             return{
@@ -15,14 +14,15 @@ export const shoppingListReducer = (state = initialstate, action) => {
                     key: Math.random(),
                     name: action.data
                 })
-            }
+            };
             case REMOVE_ITEM:
                 return{
                     ...state,
                     shoppinglist: state.shoppinglist.filter((item)=> item.key !== action.key)
                 }
+                default:
+                    return state
     };
-
-    
-
 }
+
+export default reducer

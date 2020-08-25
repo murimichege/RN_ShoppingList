@@ -1,15 +1,15 @@
 import {ADD_ITEM, REMOVE_ITEM} from '../ActionTypes'
 
-export const additem = product => {
+export const additem = (product) => {
     return{
         type: ADD_ITEM,
-        payload: product
+        data: product
     }
 }
 
-export const removeitem = key => {
+export const deleteitem = (key) => {
     return{
         type: REMOVE_ITEM,
-        payload: key
+        key: key
     }
 }

@@ -13,7 +13,7 @@ export default function MainStackNavigator(){
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="List" component={List} />
 
       </Stack.Navigator>
     </NavigationContainer>

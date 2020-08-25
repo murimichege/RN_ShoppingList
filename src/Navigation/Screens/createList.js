@@ -1,21 +1,16 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, Image, AsyncStorage } from "react-native"
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import List from './List'
+import {View, Text, StyleSheet, Image,TextInput, TouchableOpacity } from "react-native"
+
 import { connect } from 'react-redux'
-import {additem} from  '../../Redux/Actions/ShoppingListActions'
+import { additem }  from  '../../Redux/Actions/ShoppingListActions'
 
 
- function Home(){
+ function Home(props){
     const [product, setProduct] = useState(null);
-
-    
-       
-  
     return(
         <View style={styles.container}>
             <Image source ={
-                require("../images/shoppinglistapp.png")}
+                require("../../images/shoppinglistapp.png")}
                 style ={{width:"100%", height: 100, marginTop: 64 }}
                 resizeMode="contain"
                 />
@@ -29,7 +24,11 @@ import {additem} from  '../../Redux/Actions/ShoppingListActions'
                  onChangeText={(product) =>setProduct(product)}/>
 
                 <TouchableOpacity style={styles.button}
-                 onPress ={() => props.add(product)}>
+                 onPress ={() =>{
+                     props.add(product) 
+                     setProduct(product)
+                     }}>
+                 
                    
                     <Text style= {{color:"white"}}>Okay</Text>
                 </TouchableOpacity>
@@ -81,17 +80,17 @@ const styles = StyleSheet.create({
      }
   });
 
-  const mapStateToProps = (state) =>{
+  const mapStateToProps = (state) => {
+      console.log(state)
       return{
-          products: state.shoppingListReducer.List
-      }
+      product : state.shoppinglist
   }
-
+  }
   const mapDispatchToProps = (dispatch) => {
       return{
           add: (product) => dispatch(additem(product))
       }
   }
 
-  export default connect(mapDispatchToProps, mapStateToProps)(Home)
+  export default connect( mapStateToProps, mapDispatchToProps)(Home)
   
